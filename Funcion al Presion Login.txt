@@ -1,0 +1,106 @@
+  const handleLogin = async () => 
+  {
+    
+    // Verificando que no esté vacío user y pass
+    if (!user.trim() || !pass.trim()) 
+    {
+        showCustomAlert('Campos vacíos', 'Escribe usuario y contraseña');
+        return;
+    }
+
+    // Verifica si hay conexión a la BD
+    if (conexionBD.estado !== "conectado") 
+    {
+        showCustomAlert(
+            'Sin conexión', 
+            conexionBD.mensaje + '\n\n¿Deseas reintentar la conexión?',
+            () => verificarConexionBD()
+        );
+        return;
+    }
+
+    try 
+    {
+        const response = await fetch(API_URLS.LOGIN, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ user, pass }),
+        });
+
+        // 👇 1. OBTENER TEXTO CRUDO PARA INSPECCIONAR
+        const textoRespuesta = await response.text();
+        console.log("📝 Respuesta cruda del servidor:", textoRespuesta);
+        console.log("📡 Status HTTP:", response.status);
+
+        // 👇 2. VERIFICAR SI LA RESPUESTA ESTÁ VACÍA
+        if (!textoRespuesta || textoRespuesta.trim() === '') 
+        {
+            throw new Error('El servidor devolvió una respuesta vacía.');
+        }
+
+        // 👇 3. VERIFICAR SI HUBO ERROR HTTP (antes de parsear)
+        if (!response.ok) 
+        {
+            throw new Error(`Error HTTP ${response.status}: ${textoRespuesta}`);
+        }
+
+        // 👇 4. PARSEAR EL JSON (¡ESTO ES LO QUE TE FALTABA!)
+        let data;
+        try 
+        {
+            data = JSON.parse(textoRespuesta);
+        } 
+        catch (parseError) 
+        {
+            console.error("❌ Error al parsear JSON:", parseError);
+            throw new Error('La respuesta del servidor no tiene formato JSON válido.');
+        }
+
+        console.log("✅ Datos parseados:", data);
+
+        // 👇 5. AHORA SÍ usar las propiedades del JSON parseado
+        if (data.exito) 
+        {
+            // Guardar sesión
+            await AsyncStorage.setItem('user_session', JSON.stringify(data.usuario));
+
+            // Navegar a Home
+            showCustomAlert("¡Bienvenido!", data.mensaje, () => {
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Home2' }],
+                });
+            });
+        }
+        else
+        {
+            console.log("Login fallido:", data.mensaje);
+            showCustomAlert('Error de Login', data.mensaje || "Credenciales Incorrectas");
+        }
+    } 
+    catch (error) 
+    {
+        console.error("❌ Error en handleLogin:", error);
+        
+        let mensajeError = 'Ocurrió un error al iniciar sesión';
+        
+        if (error.message.includes('Network request failed')) 
+        {
+            mensajeError = 'No se pudo conectar al servidor. Verifica tu conexión.';
+        } 
+        else if (error.message.includes('timeout')) 
+        {
+            mensajeError = 'La conexión tardó demasiado. Intenta de nuevo.';
+        }
+        else if (error.message) 
+        {
+            mensajeError = error.message;
+        }
+        
+        showCustomAlert('Error', mensajeError);
+    } 
+    finally 
+    {
+        setLoading(false);
+    }
+};
