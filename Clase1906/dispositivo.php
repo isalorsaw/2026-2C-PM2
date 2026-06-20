@@ -1,5 +1,5 @@
 <?php
-// api/core/dispositivo.php
+//htdocs/movil/core/dispositivo.php (Carpeta core queda a lado de api)
 
 header('Content-Type: application/json; charset=utf-8');
 require_once '../config/database.php';
