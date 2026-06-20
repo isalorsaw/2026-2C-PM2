@@ -1,5 +1,5 @@
 <?php
-// api/dispositivos/registrarDispositivo.php
+// api/core/dispositivo.php
 
 header('Content-Type: application/json; charset=utf-8');
 require_once '../config/database.php';

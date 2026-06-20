@@ -1,4 +1,5 @@
 <?php
+//api/core/Logger.php
 header('Content-Type: application/json; charset=utf-8'); // 👈 Clave: declarar UTF-8
 require_once '../config/database.php';
 require_once '../config/cors.php';
