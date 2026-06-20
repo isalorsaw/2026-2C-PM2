@@ -1,0 +1,23 @@
+CREATE TABLE `tbl_bitacora` (
+	`bitacora_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+	`usuario_id` INT(11) NULL DEFAULT NULL,
+	`dispo_unique_id` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`ip_origen` VARCHAR(45) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`bitacora_accion` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`tabla_afectada` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`registro_id` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`datos_anteriores` JSON NULL DEFAULT NULL,
+	`datos_nuevos` JSON NULL DEFAULT NULL,
+	`bitacora_estado` ENUM('EXITOSO','FALLIDO','ERROR_SISTEMA') NOT NULL DEFAULT 'EXITOSO' COLLATE 'utf8mb4_unicode_ci',
+	`bitacora_fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`bitacora_id`) USING BTREE,
+	INDEX `idx_usuario_fecha` (`usuario_id`, `bitacora_fecha`) USING BTREE,
+	INDEX `idx_dispositivo` (`dispo_unique_id`) USING BTREE,
+	INDEX `idx_accion_fecha` (`bitacora_accion`, `bitacora_fecha`) USING BTREE,
+	CONSTRAINT `fk_bitacora_dispositivo` FOREIGN KEY (`dispo_unique_id`) REFERENCES `tbl_dispositivos` (`dispo_unique_id`) ON UPDATE CASCADE ON DELETE SET NULL,
+	CONSTRAINT `fk_bitacora_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `tbl_usuario` (`usuario_id`) ON UPDATE CASCADE ON DELETE SET NULL
+)
+COLLATE='utf8mb4_unicode_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=92
+;

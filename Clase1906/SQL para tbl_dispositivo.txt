@@ -1,0 +1,16 @@
+CREATE TABLE `tbl_dispositivos` (
+	`dispo_unique_id` VARCHAR(100) NOT NULL COLLATE 'utf8mb4_unicode_ci',
+	`dispo_nombre_equipo` VARCHAR(100) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`dispo_marca` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`dispo_modelo` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`dispo_so` VARCHAR(20) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`dispo_so_version` VARCHAR(20) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`dispo_dir_mac` VARCHAR(17) NULL DEFAULT NULL COLLATE 'utf8mb4_unicode_ci',
+	`dispo_fregistro` DATETIME NOT NULL,
+	`dispo_factual` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	UNIQUE INDEX `dispo_unique_id` (`dispo_unique_id`) USING BTREE,
+	INDEX `idx_unique_id` (`dispo_unique_id`) USING BTREE
+)
+COLLATE='utf8mb4_unicode_ci'
+ENGINE=InnoDB
+;
