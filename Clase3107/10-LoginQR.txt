@@ -45,3 +45,11 @@
     marginTop: 20,
     alignItems: 'center',
   },
+  
+  //=-==================================
+  
+  const irALoginQR = () => {
+    // Asegúrate de que 'LoginQR' sea el nombre exacto que le diste 
+    // a la pantalla en tu Stack Navigator (App.js o donde tengas las rutas)
+    navigation.navigate('LoginQR'); 
+  };
