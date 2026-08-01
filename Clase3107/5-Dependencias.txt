@@ -1,0 +1,1 @@
+npm install @react-native-picker/picker react-native-qrcode-svg react-native-svg react-native-view-shot
